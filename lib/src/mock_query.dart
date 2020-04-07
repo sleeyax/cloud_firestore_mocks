@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
 import 'package:mockito/mockito.dart';
 
+import 'mock_document_reference.dart';
 import 'mock_snapshot.dart';
 
 typedef List<DocumentSnapshot> _QueryOperation(List<DocumentSnapshot> input);
@@ -97,6 +98,9 @@ class MockQuery extends Mock implements Query {
       List<dynamic> whereIn,
       bool isNull}) {
     if (isEqualTo != null) {
+      if (value is MockDocumentReference && isEqualTo is MockDocumentReference) {
+        return value.path == isEqualTo.path;
+      }
       return value == isEqualTo;
     } else if (isGreaterThan != null) {
       Comparable fieldValue = value;
